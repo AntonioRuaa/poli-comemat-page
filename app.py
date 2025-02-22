@@ -2,9 +2,11 @@
 import os
 
 import aws_cdk as cdk
+from dotenv import (load_dotenv)
 
 from poli_comemat_page.poli_comemat_page_stack import PoliComematPageStack
 
+load_dotenv()
 
 app = cdk.App()
 PoliComematPageStack(app, "PoliComematPageStack",
@@ -20,7 +22,7 @@ PoliComematPageStack(app, "PoliComematPageStack",
     # Uncomment the next line if you know exactly what Account and Region you
     # want to deploy the stack to. */
 
-    #env=cdk.Environment(account='123456789012', region='us-east-1'),
+    env=cdk.Environment(account=os.getenv('ACCOUNT'), region=os.getenv('AWS_REGION')),
 
     # For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html
     )
