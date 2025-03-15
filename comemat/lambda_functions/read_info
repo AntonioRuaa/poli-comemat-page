@@ -1,0 +1,60 @@
+import json
+import boto3
+from botocore.exceptions import ClientError
+
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('CONTENT_DYNAMO_TABLE')
+
+def lambda_reader(self, content):
+    try:
+        body = json.loads(content['body'])
+
+        content_type = body.get('content_type', 'A') #Artículo (A), curso (C) o lección (L)
+        tittle = body.get('tittle', 'Sin_titulo')
+
+        author = body.get('author', 'Anónimo')
+        content = body.get('content', 'Indefinido')
+        creation_date = body.get('creation_date', 'Sin_fecha')
+
+        if content_type == 'C':
+            lectures_number = body.get('lectures_number', 'Indefinido')
+
+            table.put_item(
+                Item = {
+                    'content_type': content_type,
+                    'tittle': tittle,
+                    'author' : author,
+                    'content' : content,
+                    'creation_date' : creation_date,
+                    'lectures_number': lectures_number
+                }
+            )
+
+        elif content_type == 'L':
+            course = body.get('course', 'Sin_definir')
+            link = body.get('link', 'Sin_links')
+
+            table.put_item(
+                Item = {
+                    'content_type': content_type,
+                    'tittle': tittle,
+                    'author' : author,
+                    'content' : content,
+                    'creation_date' : creation_date,
+                    'course' : course,
+                    'link' : link
+                }
+            )
+        else:
+            table.put_item(
+                Item = {
+                    'content_type': content_type,
+                    'tittle': tittle,
+                    'author' : author,
+                    'content' : content,
+                    'creation_date' : creation_date
+                }
+            )
+
+    except ClientError as error:
+        raise error

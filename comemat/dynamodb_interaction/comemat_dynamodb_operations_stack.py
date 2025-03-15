@@ -18,7 +18,10 @@ class ComematDynamoStack(Stack):
                 "ContentTable",
                 table_name=os.getenv("CONTENT_DYNAMO_TABLE"),
                 partition_key=dynamodb.Attribute(
-                    name="content_id", type=dynamodb.AttributeType.STRING
+                    name="content_type", type=dynamodb.AttributeType.STRING
+                ),
+                sort_key=dynamodb.Attribute(
+                    name="tittle", type=dynamodb.AttributeType.STRING
                 ),
                 billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
                 encryption=dynamodb.TableEncryption.AWS_MANAGED,
